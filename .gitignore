@@ -1,0 +1,12 @@
+coder-pg-data/
+gitea-pg-data/
+jenkins/
+nexus/
+code-server/
+coder-cache/
+coder-home/
+coder-modules/
+coder-terraform-providers/
+gitea-data/
+
+*.tar.gz
