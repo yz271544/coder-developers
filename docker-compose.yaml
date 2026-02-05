@@ -5,14 +5,17 @@ networks:
 
 services:
   coder-ai-forge:
-    image: ghcr.io/coder/coder:${CODER_VERSION:-latest}
+    #image: ghcr.io/coder/coder:${CODER_VERSION:-latest}
+    image: registry.cn-beijing.aliyuncs.com/dc_huzy/coder:${CODER_VERSION:-latest}
     container_name: coder-ai-forge
     restart: unless-stopped
     environment:
       CODER_PG_CONNECTION_URL: "postgresql://${CODER_POSTGRES_USER:-coder}:${CODER_POSTGRES_PASSWORD:-Coder0926!}@coder-db-ai-forge/${CODER_POSTGRES_DB:-coder}?sslmode=disable"
       CODER_HTTP_ADDRESS: "0.0.0.0:7080"
       CODER_ACCESS_URL: "${CODER_ACCESS_URL}"
-      TF_SKIP_PROVIDER_VERIFY: 1
+      #TF_SKIP_PROVIDER_VERIFY: 1
+    env_file:
+      - .env
     networks:
       - ai-forge-dev
     ports:
@@ -27,15 +30,16 @@ services:
       #- ./coder-terraform:/home/coder/.terraform
       - ./coder-terraform-providers:/providers
       - ./coder-terraformrc:/home/coder/.terraformrc
-      #- ./coder-terraform.rc:/root/.terraformrc
-      #- ./coder-modules:/home/coder/.cache/coder/modules
+      - ./coder-terraformrc:/root/.terraformrc
+      - ./coder-modules:/home/coder/.cache/coder/modules
     extra_hosts:
       - "host.docker.internal:host-gateway"
     depends_on:
       coder-db-ai-forge:
         condition: service_healthy
   coder-db-ai-forge:
-    image: "postgres:17"
+    #image: "postgres:17"
+    image: "registry.cn-beijing.aliyuncs.com/dc_huzy/postgres:17"
     container_name: coder-db-ai-forge
     restart: unless-stopped
     environment:
@@ -60,7 +64,7 @@ services:
       timeout: 5s
       retries: 5
   gitea-ai-forge:
-    image: gitea/gitea:1.24.6
+    image: registry.cn-beijing.aliyuncs.com/dc_huzy/gitea:1.24.6
     container_name: gitea-ai-forge
     restart: unless-stopped
     environment:
@@ -82,7 +86,7 @@ services:
     depends_on:
       - gitea-db-ai-forge
   gitea-db-ai-forge:
-    image: postgres:17
+    image: registry.cn-beijing.aliyuncs.com/dc_huzy/postgres:17
     container_name: gitea-db-ai-forge
     restart: unless-stopped
     environment:
@@ -107,7 +111,7 @@ services:
       timeout: 5s
       retries: 5
   nexus-ai-forge:
-    image: "sonatype/nexus3:3.61.0"
+    image: "registry.cn-beijing.aliyuncs.com/dc_huzy/nexus3:3.61.0"
     container_name: nexus-ai-forge
     restart: unless-stopped
     environment:
@@ -120,7 +124,7 @@ services:
       - /etc/localtime:/etc/localtime
       - ./nexus/data/nexus-data:/nexus-data
   jenkins-ai-forge:
-    image: "jenkins/jenkins:2.507-jdk17"
+    image: "registry.cn-beijing.aliyuncs.com/dc_huzy/jenkins:2.507-jdk17"
     container_name: jenkins-ai-forge
     restart: unless-stopped
     privileged: true
