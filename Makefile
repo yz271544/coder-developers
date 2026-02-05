@@ -1,8 +1,8 @@
 .PHONY: init
 init:
-	@mkdir jenkins/data
+	@mkdir jenkins/data -p
 	@chmod -R 777 jenkins
-	@mkdir nexus/data/nexus-data
+	@mkdir nexus/data/nexus-data -p
 	@chmod -R 777 nexus
 	@mkdir coder-pg-data
 	@mkdir gitea-pg-data
